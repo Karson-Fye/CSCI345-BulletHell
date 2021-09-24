@@ -17,15 +17,15 @@ class MyGame:public Game{
     vector<Particle *> particles;
     Animation a,b;
 	public:
-	MyGame(int w=640,int h=480):Game("Karl was here",w,h) {
-      for (int i=0;i<100;i++) { 
+	MyGame(int w=640,int h=480):Game("The Game",w,h) {
+      for (int i=0;i<1;i++) { 
 		 int vx=rand()%500 - 250;
 		 int vy=rand()%500 - 250;
 		 a.read(media,"media/anim1.txt");
 	//	 SDL_Texture *bitmapTex=media->read("media/obsticle.bmp");
 		 src.x=0; src.y=0;
 		 SDL_QueryTexture(a.getTexture(), NULL, NULL, &src.w, &src.h);
-         particles.push_back(new Particle(ren,&a,&src,w/2,h/2,vx,vy,0,50));
+         particles.push_back(new Particle(ren,&a,&src,w/5,h/2,vx,vy,0,50));
          particles[i]->setBound(0,0,w,h);
        }
        b.read(media,"media/background.txt");
