@@ -1,12 +1,12 @@
 SRC=src
 MAINSRC=$(SRC)/main.cpp
 BIN=bin/Simple
-SDL2CFLAGS=-I/i686-w64-mingw32/include/SDL2
-SDL2LIBS=-L/i686-w64-mingw32/lib -L/i686-w64-mingw32 -lmingw32 -lSDL2main -lSDL2
+WINSDL2CFLAGS=-I/i686-w64-mingw32/include/SDL2
+WINSDL2LIBS=-L/i686-w64-mingw32/lib -L/i686-w64-mingw32 -lmingw32 -lSDL2main -lSDL2
 
-all: $(BIN)
+win: $(BIN)
 $(BIN): $(MAINSRC)
-	g++ $(MAINSRC) $(SDL2CFLAGS) -o $(BIN) $(SDL2LIBS)
+	g++ $(MAINSRC) $(WINSDL2CFLAGS) -o $(BIN) $(WINSDL2LIBS)
 
-run: $(BIN)
+winrun: $(BIN)
 	$(BIN)
