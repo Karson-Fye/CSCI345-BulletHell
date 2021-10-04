@@ -1,0 +1,13 @@
+12
+83 stick1
+83 stick2
+84 stick3
+83 stick4
+83 stick5
+84 stick6
+83 stick7
+83 stick8
+84 stick9
+83 stick10
+83 stick11
+84 stick12
