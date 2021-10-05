@@ -34,16 +34,16 @@ class Game {
 		newTicks=SDL_GetTicks();
         SDL_Event e;
         if (SDL_PollEvent(&e)) {
-          if (e.type == SDL_QUIT) {
-              break;
+          if (e.type == SDL_QUIT)break;
+          else if (e.type==SDL_KEYDOWN) handleKeyDown(e);
           }
-        }
         update(double(newTicks-ticks)/1000.0);  // seconds of elapsed time
         ticks=newTicks;
       //  SDL_Delay(100);
       }
 	}
 	virtual void update(double dt/*s of elapsed time*/)=0;
+	virtual void handleKeyDown(SDL_Event key)=0;
 	~Game() {
 	  SDL_DestroyRenderer(ren);
       SDL_DestroyWindow(window);

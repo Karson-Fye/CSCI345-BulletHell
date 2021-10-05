@@ -25,12 +25,45 @@ class MyGame:public Game{
 	//	 SDL_Texture *bitmapTex=media->read("media/obsticle.bmp");
 		 src.x=0; src.y=0;
 		 SDL_QueryTexture(a.getTexture(), NULL, NULL, &src.w, &src.h);
-         particles.push_back(new Particle(ren,&a,&src,w/5,h/2,vx,vy,0,50));
+         particles.push_back(new Particle(ren,&a,&src,w/5,h/2/*,vx,vy,0,50*/));
          particles[i]->setBound(0,0,w,h);
        }
        b.read(media,"media/background.txt");
        src.x=0; src.y=0; src.w=640; src.h=480;
 	}
+	
+	void handleKeyDown(SDL_Event keyEvent) {
+		if(keyEvent.key.keysym.sym==SDLK_w)
+		{
+			particles[0]->y-=10;
+			cout<< "W works" << endl; 
+		}
+		if(keyEvent.key.keysym.sym==SDLK_a)
+		{
+			particles[0]->x-=10;
+			cout<< "A works" << endl; 
+		}
+		if(keyEvent.key.keysym.sym==SDLK_s)
+		{
+			particles[0]->y+=10;
+			cout<< "S works" << endl; 
+		}
+		if(keyEvent.key.keysym.sym==SDLK_d)
+		{
+			particles[0]->x+=10;
+			cout<< "D works" << endl; 
+		}
+		
+		/*if(keyEvent.key.keysym.sym==SDLK_d & keyEvent.key.keysym.sym==SDLK_w)
+		{
+			particles[0]->x+=10;
+			particles[0]->y-=10;
+			cout<< "D works and W work" << endl; 
+		}*/
+	}
+	
+	
+	
 	void update(double dt) {
       SDL_RenderClear(ren);
       b.update(dt);

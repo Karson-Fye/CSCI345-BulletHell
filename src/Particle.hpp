@@ -75,7 +75,7 @@ class Particle {
   Animation  *a;
   SDL_Rect *src;
   SDL_Rect dest;
-  double x,y,vx,vy,ax,ay;
+  public: double x,y,vx,vy,ax,ay;
   int minx,miny,maxx,maxy;
   public:
   Particle(SDL_Renderer *newRen,Animation *newA, 
