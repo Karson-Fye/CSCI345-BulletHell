@@ -15,7 +15,7 @@ class AnimationFrame{
 	void read(MediaManager *media,ifstream &in) {
 		string fname;
 		in >> millis >> fname;
-		frame=media->read("media/"+fname+".bmp");
+		frame=media->read("media/bmps/"+fname+".bmp");
 	}
 	int getMillis() { return millis; }
 	SDL_Texture *getTexture() { return frame; }
@@ -51,7 +51,6 @@ class Animation{
 	}
 	void update(double dt) {
 		currentTime+=(int)(dt*1000.0);
-		cout << "Total Time " << totalTime << endl;
 		currentTime%=totalTime;
 	}
 	SDL_Texture *getTexture() {

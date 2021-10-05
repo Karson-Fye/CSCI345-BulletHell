@@ -21,7 +21,7 @@ class MyGame:public Game{
       for (int i=0;i<1;i++) { 
 		 int vx=rand()%500 - 250;
 		 int vy=rand()%500 - 250;
-		 a.read(media,"media/anim1.txt");
+		 a.read(media,"media/stick.txt");
 	//	 SDL_Texture *bitmapTex=media->read("media/obsticle.bmp");
 		 src.x=0; src.y=0;
 		 SDL_QueryTexture(a.getTexture(), NULL, NULL, &src.w, &src.h);

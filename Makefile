@@ -10,10 +10,10 @@ WINSDL2LIBS=-L/i686-w64-mingw32/lib -L/i686-w64-mingw32 -lmingw32 -lSDL2main -lS
 all: $(BIN)
 
 $(BIN): $(MAINSRC) $(HEADERS) 
-		g++ -g $(MAINSRC) $(SDL2CFLAGS) -o $(BIN) $(SDL2LIBS) -DRELEASE
+	g++ -g $(MAINSRC) $(SDL2CFLAGS) -o $(BIN) $(SDL2LIBS) -DRELEASE
 
 win: $(BIN)
-		g++ -g $(MAINSRC) $(WINSDL2CFLAGS) -o $(BIN) $(WINSDL2LIBS) -DRELEASE
+	g++ -g $(MAINSRC) $(WINSDL2CFLAGS) -o $(BIN) $(WINSDL2LIBS) -DRELEASE
 		
 debug: $(BIN)
 	gdb $(BIN)
