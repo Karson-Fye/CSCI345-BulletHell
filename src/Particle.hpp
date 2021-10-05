@@ -29,6 +29,12 @@ class Particle {
 	  vx=newVx;
 	  vy=newVy;
   }
+  void setVelocityX(double newVx) {
+    vx=newVx;
+  }
+  void setVelocityY(double newVy) {
+    vy=newVy;
+  }
   void setPosition(double newPx,double newPy) {
 	  x=newPx;
 	  y=newPy;

@@ -33,16 +33,17 @@ class MyGame:public Game{
 	Mix_Chunk *sound;
 	int jx,jy;
 	public:
-	MyGame(int w=640,int h=480):Game("Karl was here",w,h) {
-	  sound=media->readWav("media/crash.wav");
-		for (int i=0;i<16;i++) { 
+	MyGame(int w=640,int h=480):Game("Bullet Hell",w,h) {
+		int numPart = 2;
+	  sound=media->readWav("media/tick.wav");
+		for (int i=0;i<numPart;i++) { 
 			int vx=rand()%500 - 250;
 			int vy=rand()%500 - 250;
 			a.read(media,"media/stick.txt");
 			// SDL_Texture *bitmapTex=media->read("media/obsticle.bmp");
 			src.x=0; src.y=0;
 			SDL_QueryTexture(a.getTexture(), NULL, NULL, &src.w, &src.h);
-			particles.push_back(new MyParticle(ren,&a,sound,&src,w/2,h/2,vx,vy,0,50));
+			particles.push_back(new MyParticle(ren,&a,sound,&src,w/2,h/2,vx,vy,0,0));
 			particles[i]->setBound(0,0,w,h);
 		}
 		jx=w/2;
@@ -51,22 +52,33 @@ class MyGame:public Game{
 		src.x=0; src.y=0; src.w=640; src.h=480;
 	}
 	void handleKeyUp(SDL_Event keyEvent) {
+		if (keyEvent.key.keysym.sym==SDLK_LEFT || keyEvent.key.keysym.sym==SDLK_RIGHT)
+		  particles[0]->setVelocityX(0);
+		if (keyEvent.key.keysym.sym==SDLK_DOWN ||	 keyEvent.key.keysym.sym==SDLK_UP)
+			particles[0]->setVelocityY(0);
 	}
 	void handleKeyDown(SDL_Event keyEvent) {
-		//cout << "KeyPress" << endl;
-		if (keyEvent.key.keysym.sym==SDLK_SPACE)
-		  particles[0]->incVelocity(0,-100);
+		if (keyEvent.key.keysym.sym==SDLK_ESCAPE)
+			delete this;
+		if (keyEvent.key.keysym.sym==SDLK_LEFT)
+		  particles[0]->setVelocityX(-200);
+		else if (keyEvent.key.keysym.sym==SDLK_RIGHT)
+			particles[0]->setVelocityX(200);
+		if (keyEvent.key.keysym.sym==SDLK_UP)
+			particles[0]->setVelocityY(-200);
+		else if (keyEvent.key.keysym.sym==SDLK_DOWN)
+			particles[0]->setVelocityY(200);
 	}
 	void handleButtonDown(SDL_Event joyEvent) {
-		if (joyEvent.jbutton.button==0 && joyEvent.jbutton.which==0)
-		  particles[0]->incVelocity(0,-100);
+		// if (joyEvent.jbutton.button==0 && joyEvent.jbutton.which==0)
+		//   particles[0]->incVelocity(0,-100);
 	}
 	void handleAxisMovement(SDL_Event joyEvent) {
-		if (joyEvent.jaxis.axis==0 && joyEvent.jaxis.which==0)
-		  jx=((joyEvent.jaxis.value)*100)/32768;
-		if (joyEvent.jaxis.axis==1 && joyEvent.jaxis.which==0)
-		  jy=((joyEvent.jaxis.value)*100)/32768;
-		particles[0]->setAcceleration(jx,jy);
+		// if (joyEvent.jaxis.axis==0 && joyEvent.jaxis.which==0)
+		//   jx=((joyEvent.jaxis.value)*100)/32768;
+		// if (joyEvent.jaxis.axis==1 && joyEvent.jaxis.which==0)
+		//   jy=((joyEvent.jaxis.value)*100)/32768;
+		// particles[0]->setAcceleration(jx,jy);
 	}
 	void update(double dt) {
 		SDL_RenderClear(ren);
