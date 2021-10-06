@@ -87,7 +87,7 @@ class MyGame:public Game{
 		// particles[0]->setAcceleration(jx,jy);
 	}
 	
-	void handleKeyDown(SDL_Event keyEvent) {
+	/*void handleKeyDown(SDL_Event keyEvent) {
 		if(keyEvent.key.keysym.sym==SDLK_w)
 		{
 			particles[0]->y-=10;
@@ -109,13 +109,13 @@ class MyGame:public Game{
 			cout<< "D works" << endl; 
 		}
 		
-		/*if(keyEvent.key.keysym.sym==SDLK_d & keyEvent.key.keysym.sym==SDLK_w)
+		if(keyEvent.key.keysym.sym==SDLK_d & keyEvent.key.keysym.sym==SDLK_w)
 		{
 			particles[0]->x+=10;
 			particles[0]->y-=10;
 			cout<< "D works and W work" << endl; 
-		}*/
-	}
+		}
+	}*/
 	
 	
 	
