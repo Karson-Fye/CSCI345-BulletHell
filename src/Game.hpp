@@ -58,8 +58,8 @@ class Game {
 	virtual void handleAxisMovement(SDL_Event move){}	
 	~Game() {
 	  SDL_DestroyRenderer(ren);
-      SDL_DestroyWindow(window);
-      SDL_Quit();
+    SDL_DestroyWindow(window);
+    SDL_Quit();
 	}
 };
 
