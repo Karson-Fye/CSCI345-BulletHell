@@ -33,8 +33,16 @@ class MyGame:public Game{
 	Animation a,b,c;
 	Mix_Chunk *sound;
 	int jx,jy;
+	int speed;
+	bool l,r,u,d,boost;
 	public:
 	MyGame(int w=640,int h=480):Game("Bullet Hell",w,h) {
+		l=false;
+		r=false;
+		u=false;
+		d=false;
+		boost=false;
+		speed=200;
 		int numPart = 2;
 	  sound=media->readWav("media/tick.wav");
 		c.read(media, "media/main.txt");
@@ -43,13 +51,13 @@ class MyGame:public Game{
 		man = new MyParticle(ren,&c,sound,&src,w/2,h/2,0,0,0,0);
 		man->setBound(0,0,w,h);
 		for (int i=0;i<numPart;i++) { 
-			int vx=rand()%500 - 250;
-			int vy=rand()%500 - 250;
+			int vx=rand()%600 - 300;
+			int vy=rand()%600 - 300;
 			a.read(media,"media/stick.txt");
 			// SDL_Texture *bitmapTex=media->read("media/obsticle.bmp");
 			src.x=0; src.y=0;
 			SDL_QueryTexture(a.getTexture(), NULL, NULL, &src.w, &src.h);
-			particles.push_back(new MyParticle(ren,&a,sound,&src,w/2,h/2,vx,vy,0,50));
+			particles.push_back(new MyParticle(ren,&a,sound,&src,w/2,h/2,vx,vy,0,100));
 			particles[i]->setBound(0,0,w,h);
 		}
 		jx=w/2;
@@ -58,34 +66,71 @@ class MyGame:public Game{
 		src.x=0; src.y=0; src.w=640; src.h=480;
 	}
 	void handleKeyUp(SDL_Event keyEvent) {
-		if (keyEvent.key.keysym.sym==SDLK_LEFT || keyEvent.key.keysym.sym==SDLK_RIGHT)
+		if (keyEvent.key.keysym.sym==SDLK_LEFT) {
+			l=false;
+		}
+		else if (keyEvent.key.keysym.sym==SDLK_RIGHT) {
+			r=false;
+		}
+		else if (keyEvent.key.keysym.sym==SDLK_UP) {
+			u=false;
+		}
+		else if (keyEvent.key.keysym.sym==SDLK_DOWN) {
+			d=false;
+		}
+		else if (keyEvent.key.keysym.sym==SDLK_LSHIFT) {
+			boost=false;
+			speed=200;
+			if (l) man->setVelocityX(-speed);
+			if (r) man->setVelocityX(speed);
+			if (u) man->setVelocityY(-speed);
+			if (d) man->setVelocityY(speed);
+		}
+		if (keyEvent.key.keysym.sym==SDLK_LEFT && !r || keyEvent.key.keysym.sym==SDLK_RIGHT & !l)
 		  man->setVelocityX(0);
-		if (keyEvent.key.keysym.sym==SDLK_DOWN || keyEvent.key.keysym.sym==SDLK_UP)
+		if (keyEvent.key.keysym.sym==SDLK_DOWN && !u || keyEvent.key.keysym.sym==SDLK_UP && !d)
 			man->setVelocityY(0);
 	}
 	void handleKeyDown(SDL_Event keyEvent) {
+		if (keyEvent.key.keysym.sym==SDLK_LSHIFT)
+			boost=true;
+		if (boost) {
+			speed=400;
+			if (l) man->setVelocityX(-speed);
+			if (r) man->setVelocityX(speed);
+			if (u) man->setVelocityY(-speed);
+			if (d) man->setVelocityY(speed);
+		} 
 		if (keyEvent.key.keysym.sym==SDLK_ESCAPE)
 			delete this;
-		if (keyEvent.key.keysym.sym==SDLK_LEFT)
-		  man->setVelocityX(-200);
-		else if (keyEvent.key.keysym.sym==SDLK_RIGHT)
-			man->setVelocityX(200);
-		if (keyEvent.key.keysym.sym==SDLK_UP)
-			man->setVelocityY(-200);
-		else if (keyEvent.key.keysym.sym==SDLK_DOWN)
-			man->setVelocityY(200);
+		if (keyEvent.key.keysym.sym==SDLK_LEFT) {
+			l=true;
+		  man->setVelocityX(-speed);
+		}
+		else if (keyEvent.key.keysym.sym==SDLK_RIGHT) {
+			r=true;
+			man->setVelocityX(speed);
+		}
+		if (keyEvent.key.keysym.sym==SDLK_UP) {
+			u=true;
+			man->setVelocityY(-speed);
+		}
+		else if (keyEvent.key.keysym.sym==SDLK_DOWN) {
+			d=true;
+			man->setVelocityY(speed);
+		}
 	}
-	void handleButtonDown(SDL_Event joyEvent) {
-		// if (joyEvent.jbutton.button==0 && joyEvent.jbutton.which==0)
-		//   particles[0]->incVelocity(0,-100);
+	/* void handleButtonDown(SDL_Event joyEvent) {
+		if (joyEvent.jbutton.button==0 && joyEvent.jbutton.which==0)
+		  particles[0]->incVelocity(0,-100);
 	}
 	void handleAxisMovement(SDL_Event joyEvent) {
-		// if (joyEvent.jaxis.axis==0 && joyEvent.jaxis.which==0)
-		//   jx=((joyEvent.jaxis.value)*100)/32768;
-		// if (joyEvent.jaxis.axis==1 && joyEvent.jaxis.which==0)
-		//   jy=((joyEvent.jaxis.value)*100)/32768;
-		// particles[0]->setAcceleration(jx,jy);
-	}
+		if (joyEvent.jaxis.axis==0 && joyEvent.jaxis.which==0)
+		  jx=((joyEvent.jaxis.value)*100)/32768;
+		if (joyEvent.jaxis.axis==1 && joyEvent.jaxis.which==0)
+		  jy=((joyEvent.jaxis.value)*100)/32768;
+		particles[0]->setAcceleration(jx,jy);
+	} */
 	
 	/*void handleKeyDown(SDL_Event keyEvent) {
 		if(keyEvent.key.keysym.sym==SDLK_w)
@@ -116,8 +161,6 @@ class MyGame:public Game{
 			cout<< "D works and W work" << endl; 
 		}
 	}*/
-	
-	
 	
 	void update(double dt) {
 		SDL_RenderClear(ren);

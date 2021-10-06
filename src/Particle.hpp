@@ -52,22 +52,22 @@ class Particle {
 	  ren=newRen;
 	  a=newA;
 	  dest.w=src->w;
-      dest.h=src->h;
-      dest.x=newx;
-      dest.y=newy;
-      x=newx;
-      y=newy;
-      vx=newvx; // px/s
-      vy=newvy; // px/s
-      ax=newax;
-      ay=neway;  // px/s/s
-      setBound();
+    dest.h=src->h;
+    dest.x=newx;
+    dest.y=newy;
+    x=newx;
+    y=newy;
+    vx=newvx; // px/s
+    vy=newvy; // px/s
+    ax=newax;
+    ay=neway;  // px/s/s
+    setBound();
   }
   void setBound(int newMinX=0,int newMinY=0,int newMaxX=0,int newMaxY=0) {
-      minx=newMinX;
-      maxx=newMaxX;
-      miny=newMinY;
-      maxy=newMaxY;
+    minx=newMinX;
+    maxx=newMaxX;
+    miny=newMinY;
+    maxy=newMaxY;
   }
   virtual void collision() {
   }
@@ -83,8 +83,8 @@ class Particle {
 	  vx+=ax*dt; vy+=ay*dt; 
 	  x+=vx*dt;  y+=vy*dt;
 	  dest.x=(int)x;
-      dest.y=(int)y;
-      a->update(dt);
-      SDL_RenderCopy(ren, a->getTexture(), src, &dest);
+    dest.y=(int)y;
+    a->update(dt);
+    SDL_RenderCopy(ren, a->getTexture(), src, &dest);
   }
 };
