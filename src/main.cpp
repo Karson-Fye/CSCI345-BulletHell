@@ -26,98 +26,117 @@ class MyParticle:public Particle {
 	}
 };
 
+class MainCharacter:public MyParticle {
+	bool left,right,up,down,boost;
+	double speed;
+	public:
+  MainCharacter(SDL_Renderer *ren,Animation *a,Mix_Chunk *newSample,SDL_Rect *src,
+	  double x,double y,double vx=0,double vy=0,double ax=0,double ay=0,double newSpeed=200):
+		MyParticle(ren,a,newSample,src,x,y,vx,vy,ax,ay) {
+			left=0;right=0;up=0;down=0;boost=0;
+			speed=newSpeed;
+	}
+	double getSpeed() {return speed;}
+	bool getBoost() {return boost;}
+	bool getLeft() {return left;}
+	bool getRight() {return right;}
+	bool getUp() {return up;}
+	bool getDown() {return down;}
+	void setSpeed(double newSpeed) {speed = newSpeed;}
+	void setBoost(bool newBoost) {boost = newBoost;}
+	void setLeft(bool newLeft) {left = newLeft;}
+	void setRight(bool newRight) {right = newRight;}
+	void setUp(bool newUp) {up = newUp;}
+	void setDown(bool newDown) {down = newDown;}
+};
+
 class MyGame:public Game{	  
 	SDL_Rect src;
 	vector<Particle *> particles;
-	Particle *man;
+	MainCharacter *man;
 	Animation a,b,c;
 	Mix_Chunk *sound;
 	int jx,jy;
-	int speed;
-	bool l,r,u,d,boost;
 	public:
 	MyGame(int w=640,int h=480):Game("Bullet Hell",w,h) {
-		l=false;
-		r=false;
-		u=false;
-		d=false;
-		boost=false;
-		speed=200;
 		int numPart = 2;
+
 	  sound=media->readWav("media/tick.wav");
+		a.read(media,"media/stick.txt");
+		b.read(media,"media/background.txt");
 		c.read(media, "media/main.txt");
+		
 		src.x=0; src.y=0;
 		SDL_QueryTexture(c.getTexture(), NULL, NULL, &src.w ,&src.h);
-		man = new MyParticle(ren,&c,sound,&src,w/2,h/2,0,0,0,0);
+		man = new MainCharacter(ren,&c,sound,&src,w/2,h/2,0,0,0,0,200);
 		man->setBound(0,0,w,h);
 		for (int i=0;i<numPart;i++) { 
 			int vx=rand()%600 - 300;
 			int vy=rand()%600 - 300;
-			a.read(media,"media/stick.txt");
-			// SDL_Texture *bitmapTex=media->read("media/obsticle.bmp");
-			src.x=0; src.y=0;
 			SDL_QueryTexture(a.getTexture(), NULL, NULL, &src.w, &src.h);
 			particles.push_back(new MyParticle(ren,&a,sound,&src,w/2,h/2,vx,vy,0,100));
 			particles[i]->setBound(0,0,w,h);
 		}
-		jx=w/2;
-		jy=w/2;
-		b.read(media,"media/background.txt");
-		src.x=0; src.y=0; src.w=640; src.h=480;
+		jx=w/2; jy=w/2;
+		src.w=640; src.h=480;
 	}
 	void handleKeyUp(SDL_Event keyEvent) {
-		if (keyEvent.key.keysym.sym==SDLK_LEFT) {
-			l=false;
+		if (keyEvent.key.keysym.sym==SDLK_a) {
+			man->setLeft(false);
+			if (man->getRight()) man->setVelocityX(man->getSpeed());
 		}
-		else if (keyEvent.key.keysym.sym==SDLK_RIGHT) {
-			r=false;
+		else if (keyEvent.key.keysym.sym==SDLK_d) {
+			man->setRight(false);
+			if (man->getLeft()) man->setVelocityX(-man->getSpeed());
 		}
-		else if (keyEvent.key.keysym.sym==SDLK_UP) {
-			u=false;
+		else if (keyEvent.key.keysym.sym==SDLK_w) {
+			man->setUp(false);
+			if (man->getDown()) man->setVelocityX(man->getSpeed());
 		}
-		else if (keyEvent.key.keysym.sym==SDLK_DOWN) {
-			d=false;
+		else if (keyEvent.key.keysym.sym==SDLK_s) {
+			man->setDown(false);
+			if (man->getUp()) man->setVelocityX(-man->getSpeed());
 		}
 		else if (keyEvent.key.keysym.sym==SDLK_LSHIFT) {
-			boost=false;
-			speed=200;
-			if (l) man->setVelocityX(-speed);
-			if (r) man->setVelocityX(speed);
-			if (u) man->setVelocityY(-speed);
-			if (d) man->setVelocityY(speed);
+			man->setBoost(false);
+			man->setSpeed(200);
+			if (man->getLeft()) man->setVelocityX(-man->getSpeed());
+			if (man->getRight()) man->setVelocityX(man->getSpeed());
+			if (man->getUp()) man->setVelocityY(-man->getSpeed());
+			if (man->getDown()) man->setVelocityY(man->getSpeed());
 		}
-		if (keyEvent.key.keysym.sym==SDLK_LEFT && !r || keyEvent.key.keysym.sym==SDLK_RIGHT & !l)
+		if (!man->getLeft() && !man->getRight())
 		  man->setVelocityX(0);
-		if (keyEvent.key.keysym.sym==SDLK_DOWN && !u || keyEvent.key.keysym.sym==SDLK_UP && !d)
+		if (!man->getDown() && !man->getUp())
 			man->setVelocityY(0);
 	}
 	void handleKeyDown(SDL_Event keyEvent) {
 		if (keyEvent.key.keysym.sym==SDLK_LSHIFT)
-			boost=true;
-		if (boost) {
-			speed=400;
-			if (l) man->setVelocityX(-speed);
-			if (r) man->setVelocityX(speed);
-			if (u) man->setVelocityY(-speed);
-			if (d) man->setVelocityY(speed);
-		} 
-		if (keyEvent.key.keysym.sym==SDLK_ESCAPE)
+			man->setBoost(true);
+		else if (keyEvent.key.keysym.sym==SDLK_ESCAPE)
 			delete this;
-		if (keyEvent.key.keysym.sym==SDLK_LEFT) {
-			l=true;
-		  man->setVelocityX(-speed);
+		else if (keyEvent.key.keysym.sym==SDLK_a) {
+			man->setLeft(true);
+		  man->setVelocityX(-man->getSpeed());
 		}
-		else if (keyEvent.key.keysym.sym==SDLK_RIGHT) {
-			r=true;
-			man->setVelocityX(speed);
+		else if (keyEvent.key.keysym.sym==SDLK_d) {
+			man->setRight(true);
+			man->setVelocityX(man->getSpeed());
 		}
-		if (keyEvent.key.keysym.sym==SDLK_UP) {
-			u=true;
-			man->setVelocityY(-speed);
+		else if (keyEvent.key.keysym.sym==SDLK_w) {
+			man->setUp(true);
+			man->setVelocityY(-man->getSpeed());
 		}
-		else if (keyEvent.key.keysym.sym==SDLK_DOWN) {
-			d=true;
-			man->setVelocityY(speed);
+		else if (keyEvent.key.keysym.sym==SDLK_s) {
+			man->setDown(true);
+			man->setVelocityY(man->getSpeed());
+		}
+		if (man->getBoost()) {
+			man->setSpeed(400);
+			if (man->getLeft()) man->setVelocityX(-man->getSpeed());
+			if (man->getRight()) man->setVelocityX(man->getSpeed());
+			if (man->getUp()) man->setVelocityY(-man->getSpeed());
+			if (man->getDown()) man->setVelocityY(man->getSpeed());
 		}
 	}
 	/* void handleButtonDown(SDL_Event joyEvent) {

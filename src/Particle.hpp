@@ -10,7 +10,7 @@ class Particle {
   Animation  *a;
   SDL_Rect *src;
   SDL_Rect dest;
-  public: double x,y,vx,vy,ax,ay;
+  double x,y,vx,vy,ax,ay;
   int minx,miny,maxx,maxy;
   public:
   void incVelocity(double incVx,double incVy) {
